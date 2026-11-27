@@ -208,7 +208,7 @@ jobs:
           mkdir -p bin
           lipo -create -output bin/lsprivilege-extract-macos-universal \
             ../../build/extract/aarch64-apple-darwin/release/lsprivilege-extract \
-            ../../build/extract/aarch64-apple-darwin/release/lsprivilege-extract
+            ../../build/extract/x86_64-apple-darwin/release/lsprivilege-extract
 
       - name: Upload Extractor macOS
         uses: actions/upload-artifact@v7
@@ -311,7 +311,7 @@ jobs:
               "### LSPrivilege Pre-release",
               "",
               f"- **Version**: `v{version}` (`{commit_count}`)",
-              f"- **Commit**: [`{short_hash}`]({repo}/commit/{sha})",
+              f"- **Commit**: [`{short_hash}`](https://github.com/{repo}/commit/{sha})",
               "",
               "#### Commit Message",
               "```",
@@ -322,7 +322,7 @@ jobs:
               "- `LSPrivilege-release.apk`: LSPrivilege Android Application",
               "- `lsprivilege`: Standalone LSPrivilege native binary (Android arm64-v8a)",
               "- `LSPrivilege-kernel-profiles.zip`: Bundled kernel profiles (HOCON)",
-              "- `lsprivilege-extract-android-arm64`: Kernel offset extractor CLI (Android arm64)",
+              "- `lsprivilege-extract-android-arm64`: Kernel offset extractor CLI (Android arm64-v8a)",
               "- `lsprivilege-extract-linux-x86_64`: Kernel offset extractor CLI (Linux x86_64)",
               "- `lsprivilege-extract-macos-universal`: Kernel offset extractor CLI (macOS Universal arm64 + x86_64)",
               "- `lsprivilege-extract-windows-x86_64.exe`: Kernel offset extractor CLI (Windows x86_64)",
