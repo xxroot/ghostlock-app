@@ -28,6 +28,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Patch root script to allow adb shell root
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("src/core/attack/ops.cpp")
+          s = p.read_text()
+
+          old = r'"  \"$KSUD\" late-load $KMI_ARG >>\"$LOG\" 2>&1\n"'
+          new = r'"  \"$KSUD\" late-load $KMI_ARG --allow-shell >>\"$LOG\" 2>&1\n"'
+
+          if old in s:
+              p.write_text(s.replace(old, new, 1))
+              print("patched: --allow-shell enabled")
+          elif new in s:
+              print("already patched")
+          else:
+              raise SystemExit("target late-load line not found in ops.cpp")
+          PY
+
       - name: Set up JDK
         uses: actions/setup-java@v6
         with:
@@ -188,7 +208,7 @@ jobs:
           mkdir -p bin
           lipo -create -output bin/lsprivilege-extract-macos-universal \
             ../../build/extract/aarch64-apple-darwin/release/lsprivilege-extract \
-            ../../build/extract/x86_64-apple-darwin/release/lsprivilege-extract
+            ../../build/extract/aarch64-apple-darwin/release/lsprivilege-extract
 
       - name: Upload Extractor macOS
         uses: actions/upload-artifact@v7
@@ -291,7 +311,7 @@ jobs:
               "### LSPrivilege Pre-release",
               "",
               f"- **Version**: `v{version}` (`{commit_count}`)",
-              f"- **Commit**: [`{short_hash}`](https://github.com/{repo}/commit/{sha})",
+              f"- **Commit**: [`{short_hash}`]({repo}/commit/{sha})",
               "",
               "#### Commit Message",
               "```",
@@ -302,7 +322,7 @@ jobs:
               "- `LSPrivilege-release.apk`: LSPrivilege Android Application",
               "- `lsprivilege`: Standalone LSPrivilege native binary (Android arm64-v8a)",
               "- `LSPrivilege-kernel-profiles.zip`: Bundled kernel profiles (HOCON)",
-              "- `lsprivilege-extract-android-arm64`: Kernel offset extractor CLI (Android arm64-v8a)",
+              "- `lsprivilege-extract-android-arm64`: Kernel offset extractor CLI (Android arm64)",
               "- `lsprivilege-extract-linux-x86_64`: Kernel offset extractor CLI (Linux x86_64)",
               "- `lsprivilege-extract-macos-universal`: Kernel offset extractor CLI (macOS Universal arm64 + x86_64)",
               "- `lsprivilege-extract-windows-x86_64.exe`: Kernel offset extractor CLI (Windows x86_64)",
